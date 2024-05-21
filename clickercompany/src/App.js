@@ -73,7 +73,7 @@ return isLoading ? (
 :
 isSignedIn ?
 (
-  <Main clickCount={clickCount} handleClicks={handleClicks} handleSavedClickCount={handleSaveClickCount} handleResetClickCount={handleResetClickCount} handleSignout={handleSignOutn} />
+  <Main clickCount={clickCount} handleClicks={handleClicks} handleSavedClickCount={handleSaveClickCount} handleResetClickCount={handleResetClickCount} handleSignout={handleSignout} />
 )
 :
 (
