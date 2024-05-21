@@ -1,25 +1,87 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react'
 import './App.css';
+import Spinner from './components/Spinner';
+import SingIn from './components/SignIn';
+import Main from './components/Main';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App () {
+  
+  const initialCount = Number(localStorage.getItem("stored_count")) || 0;
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [clickCount, setClickCount] = useState(initialCount);
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect (() => {
+    let localStorageUsername = localStorage.getItem('userName');
+    if(localStorageUsername && localStorageUsername.leght > 0){
+      setUserName(localStorageUsername);
+      setClickCount(initialCount);
+      handleLoading();
+      handleSignIn(true);
+    };
+  },[]);
+
+function handleSetUserName(e){
+  setUserName(e);
+};
+
+function handleSetPassword(e){
+  setPassword(e);
+};
+
+function handleSignIn(bool){
+  setIsSignedIn(bool);
+};
+
+function handleLoading(){
+  setIsLoading(true);
+  setTimeout(() => setIsLoading(false), 3000);
+};
+
+function handleClicks(){
+  let currentClickCount = clickCount;
+  currentClickCount++
+  setClickCount(currentClickCount)
+}
+
+function handleSaveClickCount(){
+  localStorage.setItem('clickCount', clickCount)
+  alert('Click count saved')
+}
+
+function handleResetClickCount(){
+  localStorage.setItem('clickCount', 0)
+  setClickCount(0)
+  alert('Click count reset')
+}
+
+function handleSignout(){
+  handleSetUserName('')
+  handleSetPassword('')
+  setClickCount(0)
+  localStorage.clear()
+  setIsSignedIn(false)
+}
+
+
+return isLoading ? (
+  <Spinner />
+)
+:
+isSignedIn ?
+(
+  <Main clickCount={clickCount} handleClicks={handleClicks} handleSavedClickCount={handleSaveClickCount} handleResetClickCount={handleResetClickCount} handleSignout={handleSignOutn} />
+)
+:
+(
+ <>
+   <SingIn handleSignIn={handleSignIn} handleLoading={handleLoading} handleSetUserName={(e) => handleSetUserName(e)} handleSetPassword={(e) => handleSetPassword(e)} password={password} username={username}
+ /> 
+ </>
+ )
 }
 
 export default App;
